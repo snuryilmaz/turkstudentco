@@ -1,0 +1,21 @@
+-- Katılımlar tablosu ile ilişkiler
+ALTER TABLE katilimlar
+ADD CONSTRAINT fk_katilimlar_uyeler FOREIGN KEY (uye_id) REFERENCES uyeler(uye_id) ON DELETE CASCADE;
+
+ALTER TABLE katilimlar
+ADD CONSTRAINT fk_katilimlar_egitimler FOREIGN KEY (egitim_id) REFERENCES egitimler(egitim_id) ON DELETE CASCADE;
+
+-- Eğitimler tablosu ile Kategoriler tablosu ilişkisi
+ALTER TABLE egitimler
+ADD CONSTRAINT fk_egitimler_kategoriler FOREIGN KEY (kategori_id) REFERENCES kategoriler(kategori_id) ON DELETE SET NULL;
+
+-- Sertifika Atamaları tablosu ile ilişkiler
+ALTER TABLE sertifikaatamalari
+ADD CONSTRAINT fk_sertifikaatamalari_uyeler FOREIGN KEY (uye_id) REFERENCES uyeler(uye_id) ON DELETE CASCADE;
+
+ALTER TABLE sertifikaatamalari
+ADD CONSTRAINT fk_sertifikaatamalari_sertifikalar FOREIGN KEY (sertifika_id) REFERENCES sertifikalar(sertifika_id) ON DELETE CASCADE;
+
+-- Blog Gönderileri tablosu ile ilişkiler
+ALTER TABLE bloggonderileri
+ADD CONSTRAINT fk_bloggonderileri_uyeler FOREIGN KEY (yazar_id) REFERENCES uyeler(uye_id) ON DELETE CASCADE;
