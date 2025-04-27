@@ -1,0 +1,59 @@
+--  ÜyelerTablosu
+CREATE TABLE Uyeler (
+    uye_id SERIAL PRIMARY KEY,                
+    kullanici_adi VARCHAR(50) UNIQUE NOT NULL -- Kullanıcı adı (tekil ve zorunlu)
+    eposta VARCHAR(100) UNIQUE NOT NULL,-- E-posta adresi (tekil ve zorunlu)
+    sifre VARCHAR(255) NOT NULL, -- Şifre
+    kayit_tarihi TIMESTAMP DEFAULT NOW(),-- Kayıt tarihi
+    ad VARCHAR(50) NOT NULL,-- Ad (zorunlu)
+    soyad VARCHAR(50) NOT NULL-- Soyad (zorunlu)
+);
+
+-- Eğitimler Tablosu
+CREATE TABLE Egitimler (
+    egitim_id SERIAL PRIMARY KEY,        
+    egitim_adi VARCHAR(200) NOT NULL,--Eğitim adı (
+    aciklama TEXT,-- Eğitim açıklaması
+    baslangic_tarihi DATE, -- Başlangıç tarihi
+    bitis_tarihi DATE,-- Bitiş tarihi
+    egitmen_bilgisi VARCHAR(100),  -- Eğitmen bilgisi
+    kategori_id INT REFERENCES Kategoriler(kategori_id) ON DELETE SET NULL 
+-- Yabancı anahtar (Kategori)
+);
+
+--Kategoriler Tablosu
+CREATE TABLE Kategoriler (
+    kategori_id SERIAL PRIMARY KEY,
+    kategori_adi VARCHAR(100) UNIQUE NOT NULL   -- Kategori adı
+);
+
+-- Katılımlar Tablosu
+CREATE TABLE Katilimlar (
+    katilim_id SERIAL PRIMARY KEY, 
+    uye_id INT NOT NULL REFERENCES Uyeler(uye_id) ON DELETE CASCADE, -- Kullanıcı FK
+    egitim_id INT NOT NULL REFERENCES Egitimler(egitim_id) ON DELETE CASCADE, -- Eğitim FK
+    katilim_tarihi TIMESTAMP DEFAULT NOW() 
+);
+
+-- Sertifikalar Tablosu
+CREATE TABLE Sertifikalar (
+    sertifika_id SERIAL PRIMARY KEY,   
+    sertifika_kodu VARCHAR(100) UNIQUE NOT NULL, -- Sertifika kodu 
+    verilis_tarihi DATE -- Sertifika veriliş tarihi
+);
+
+--Sertifika Atamaları Tablosu
+CREATE TABLE SertifikaAtamalari (
+    atama_id SERIAL PRIMARY KEY, 
+    uye_id INT NOT NULL REFERENCES Uyeler(uye_id) ON DELETE CASCADE, -- Kullanıcı FK
+    sertifika_id INT NOT NULL REFERENCES Sertifikalar(sertifika_id) ON DELETE CASCADE, -- Sertifika FK
+    alis_tarihi DATE-- Alım tarihi
+);
+
+--  Blog Gönderileri Tablosu
+CREATE TABLE BlogGonderileri (
+    blog_id SERIAL PRIMARY KEY,  
+    baslik VARCHAR(255) NOT NULL, 
+    icerik TEXT,  -- Blog içeriği
+    yayin_tarihi TIMESTAMP DEFAULT NOW(),  -- Yayın tarihi
+    yazar_id INT NOT NULL REFERENCES Uyeler(uye_id) ON DELETE CASCADE 
